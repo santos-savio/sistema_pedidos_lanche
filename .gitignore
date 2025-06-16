@@ -1,0 +1,13 @@
+# Ignorar arquivos de banco de dados comuns
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+*.mdb
+*.accdb
+relatorio.csv
+
+# Ignorar diretório de dados, se existir
+/database/
+data/
+db/
