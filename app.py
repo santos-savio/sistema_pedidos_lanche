@@ -12,7 +12,8 @@ def init_db():
                 cliente TEXT,
                 lanche TEXT,
                 status TEXT,
-                hora TEXT
+                hora TEXT,
+                visivel INTEGER DEFAULT 1
             )
         """)
 
@@ -22,7 +23,7 @@ def index():
         pedidos = conn.execute("SELECT * FROM pedidos ORDER BY id DESC").fetchall()
     return render_template("index.html", pedidos=pedidos)
 
-@app.route('/adicionar', methods=['POST'])
+@app.route('/adicionar', methods=['POST']) # Adiciona um novo pedido com cliente, lanche e hora atual
 def adicionar():
     cliente = request.form['cliente']
     lanche = request.form['lanche']
@@ -32,16 +33,22 @@ def adicionar():
                      (cliente, lanche, 'aguardando', hora))
     return redirect('/')
 
-@app.route('/atualizar/<int:id>/<status>')
+@app.route('/atualizar/<int:id>/<status>') # Atualiza o status do pedido conforme o ID e o novo status
 def atualizar(id, status):
     with sqlite3.connect("vendas.db") as conn:
         conn.execute("UPDATE pedidos SET status = ? WHERE id = ?", (status, id))
     return redirect('/')
 
+@app.route('/remover/<int:id>') # Remova da exibição definindo visível como 0
+def remover(id):
+    with sqlite3.connect("vendas.db") as conn:
+        conn.execute("UPDATE pedidos SET visivel = 0 WHERE id = ?", (id,))
+    return redirect('/')
+
 @app.route('/display')
 def display():
     with sqlite3.connect("vendas.db") as conn:
-        pedidos = conn.execute("SELECT * FROM pedidos ORDER BY id DESC LIMIT 25").fetchall()
+        pedidos = conn.execute("SELECT * FROM pedidos WHERE visivel = 1 ORDER BY id DESC LIMIT 25").fetchall()
     return render_template("display.html", pedidos=pedidos)
 
 @app.route('/relatorio')
