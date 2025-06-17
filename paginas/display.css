@@ -1,0 +1,41 @@
+/* Estilo Global */
+body {
+  background: #111;
+  color: #fff;
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 30px;
+  color: #f5f5f5;
+}
+
+/* Estilo do Pedido */
+.pedido {
+  display: inline-block;
+  width: 280px;
+  margin: 15px;
+  padding: 20px;
+  border-radius: 15px;
+  font-size: 22px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Cor do Status */
+.aguardando {
+  background: #333;
+  color: #fff;
+}
+
+.preparo {
+  background: #f1c40f;
+  color: #000;
+}
+
+.pronto {
+  background: #2ecc71;
+  color: white;
+}
