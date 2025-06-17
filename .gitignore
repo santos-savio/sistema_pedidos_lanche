@@ -6,6 +6,7 @@
 *.mdb
 *.accdb
 relatorio.csv
+vendas.db
 
 # Ignorar diretório de dados, se existir
 /database/
