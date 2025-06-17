@@ -1,21 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <title>Pedidos de Lanches</title>
-    <link rel="stylesheet" href="index.css">
-
-    <link rel="stylesheet" href="index.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-
 </head>
-
 <body>
-    <div class="header">
-        <img src="/logo/clube-de-aventureiros-logo.png" alt="Clube de Aventureiros" class="logo">
-        <h1>Pedidos de Lanches</h1>
-    </div>
+    <h1>Pedidos</h1>
     <form action="/adicionar" method="post">
         Cliente: <input name="cliente" required>
         Lanche: <input name="lanche" required>
@@ -23,13 +13,7 @@
     </form>
     <hr>
     <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Cliente</th>
-            <th>Lanche</th>
-            <th>Status</th>
-            <th>Ações</th>
-        </tr>
+        <tr><th>ID</th><th>Cliente</th><th>Lanche</th><th>Status</th><th>Ações</th></tr>
         {% for p in pedidos %}
         <tr>
             <td>{{ p[0] }}</td>
@@ -49,5 +33,4 @@
     <br>
     <a href="/display" target="_blank">Abrir Display Externo</a>
 </body>
-
 </html>

@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <title>Display de Pedidos</title>
-    <link rel="stylesheet" href="display.css">
+    <style>
+        body { font-family: Arial; background: black; color: white; text-align: center; }
+        .pedido { margin: 10px; padding: 10px; font-size: 24px; border-radius: 8px; }
+        .aguardando { background: black; color: white; }
+        .preparo { background: yellow; color: black; }
+        .pronto { background: green; color: white; }
+    </style>
 </head>
-
 <body>
     <h1>Últimos Pedidos</h1>
     {% for p in pedidos %}
@@ -19,5 +23,4 @@
         setInterval(() => location.reload(), 2500);
     </script>
 </body>
-
 </html>
