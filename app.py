@@ -60,7 +60,10 @@ def relatorio():
         writer = csv.writer(f)
         writer.writerow(['ID', 'Cliente', 'Lanche', 'Status', 'Hora'])
         writer.writerows(pedidos)
-    return "Relatório gerado com sucesso! (arquivo: relatorio.csv)"
+
+    # Retorna um script para alertar o usuário e volta à página anterior
+    return "<script> alert(\"Relatório gerado com sucesso! (arquivo: relatorio.csv)\")</script>" \
+           "<script> window.history.back(); </script>"
 
 if __name__ == '__main__':
     init_db()
