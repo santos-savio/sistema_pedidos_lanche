@@ -11,6 +11,7 @@ def init_db():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 cliente TEXT,
                 lanche TEXT,
+                observacao TEXT DEFAULT '',
                 status TEXT,
                 hora TEXT,
                 visivel INTEGER DEFAULT 1
@@ -27,10 +28,12 @@ def index():
 def adicionar():
     cliente = request.form['cliente']
     lanche = request.form['lanche']
+    observacao = request.form.get('observacao', '')  # Pega a observação do formulário, se não houver, define como vazio
+    # observacao = "observação exemplo"
     hora = datetime.now().strftime("%H:%M:%S")
     with sqlite3.connect("vendas.db") as conn:
-        conn.execute("INSERT INTO pedidos (cliente, lanche, status, hora) VALUES (?, ?, ?, ?)",
-                     (cliente, lanche, 'aguardando', hora))
+        conn.execute("INSERT INTO pedidos (cliente, lanche, observacao, status, hora) VALUES (?, ?, ?, ?, ?)",
+                     (cliente, lanche, observacao, 'aguardando', hora))
     return redirect('/')
 
 @app.route('/atualizar/<int:id>/<status>') # Atualiza o status do pedido conforme o ID e o novo status
@@ -58,7 +61,7 @@ def relatorio():
         pedidos = conn.execute("SELECT * FROM pedidos").fetchall()
     with open("relatorio.csv", "w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(['ID', 'Cliente', 'Lanche', 'Status', 'Hora'])
+        writer.writerow(['ID', 'Cliente', 'Lanche', 'Observação', 'Status', 'Hora'])
         writer.writerows(pedidos)
 
     # Retorna um script para alertar o usuário e volta à página anterior

@@ -18,6 +18,7 @@
     <form action="/adicionar" method="post">
         Cliente: <input name="cliente" required>
         Lanche: <input name="lanche" required>
+        Observação: <input name="observacao">
         <button type="submit">Adicionar Pedido</button>
     </form>
     <hr>
@@ -26,6 +27,7 @@
             <th>ID</th>
             <th>Cliente</th>
             <th>Lanche</th>
+            <th>Observação</th>
             <th>Status</th>
             <th>Ações</th>
         </tr>
@@ -35,6 +37,7 @@
             <td>{{ p[1] }}</td>
             <td>{{ p[2] }}</td>
             <td>{{ p[3] }}</td>
+            <td>{{ p[4] }}</td>
             <td>
                 <a href="/atualizar/{{p[0]}}/aguardando">Aguardando</a> |
                 <a href="/atualizar/{{p[0]}}/preparo">Em preparo</a> |

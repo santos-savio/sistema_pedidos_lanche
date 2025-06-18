@@ -11,7 +11,7 @@
     <img src="{{ url_for('static', filename='clube-de-aventureiros-logo.png') }}" alt="Logo" class="logo">
     <h1>Últimos Pedidos</h1>
     {% for p in pedidos %}
-    <div class="pedido {{ p[3] }}">
+    <div class="pedido {{ p[4] }}">
         Pedido #{{ p[0] }}<br>
         Cliente: {{ p[1] }} - {{ p[4] }}
     </div>
