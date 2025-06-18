@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Display de Pedidos</title>
-    <link rel="stylesheet" href="display.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='display.css') }}">
 </head>
 
 <body>
+    <img src="{{ url_for('static', filename='clube-de-aventureiros-logo.png') }}" alt="Logo" class="logo">
     <h1>Últimos Pedidos</h1>
     {% for p in pedidos %}
     <div class="pedido {{ p[3] }}">
