@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Display de Pedidos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='display.css') }}">
+</head>
+
+<body>
+    <img src="{{ url_for('static', filename='clube-de-aventureiros-logo.png') }}" alt="Logo" class="logo">
+    <h1>Últimos Pedidos</h1>
+    {% for p in pedidos %}
+    <div class="pedido {{ p[3] }}">
+        Pedido #{{ p[0] }}<br>
+        Cliente: {{ p[1] }} - {{ p[4] }}
+    </div>
+    {% endfor %}
+    <script>
+        setInterval(() => location.reload(), 2500);
+    </script>
+</body>
+
+</html>

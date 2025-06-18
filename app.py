@@ -20,8 +20,8 @@ def init_db():
 @app.route('/')
 def index():
     with sqlite3.connect("vendas.db") as conn:
-        pedidos = conn.execute("SELECT * FROM pedidos ORDER BY id DESC").fetchall()
-    return render_template("index.html", pedidos=pedidos)
+        pedidos = conn.execute("SELECT * FROM pedidos WHERE visivel = 1 ORDER BY id DESC").fetchall()
+    return render_template("paginas/index.html", pedidos=pedidos)
 
 @app.route('/adicionar', methods=['POST']) # Adiciona um novo pedido com cliente, lanche e hora atual
 def adicionar():
@@ -49,7 +49,7 @@ def remover(id):
 def display():
     with sqlite3.connect("vendas.db") as conn:
         pedidos = conn.execute("SELECT * FROM pedidos WHERE visivel = 1 ORDER BY id DESC LIMIT 25").fetchall()
-    return render_template("display.html", pedidos=pedidos)
+    return render_template("paginas/display.html", pedidos=pedidos)
 
 @app.route('/relatorio')
 def relatorio():
@@ -64,4 +64,4 @@ def relatorio():
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5001)
