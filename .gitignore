@@ -12,3 +12,9 @@ vendas.db
 /database/
 data/
 db/
+
+# Ignora arquivos da compilação
+*.pyc
+*.pyo
+/dist/
+/build/
