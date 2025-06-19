@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, jsonify
 import sqlite3
 from datetime import datetime
+import threading
+import webbrowser
 
 app = Flask(__name__)
 
@@ -17,6 +19,17 @@ def init_db():
                 visivel INTEGER DEFAULT 1
             )
         """)
+
+def abrir_servidor():
+    webbrowser.open("http://127.0.0.1:5001/")
+
+def shutdown_server():
+    """Função para parar o servidor Flask."""
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Não está rodando com o Werkzeug Server')
+    func()
+    return "Servidor parado."
 
 @app.route('/')
 def index():
@@ -68,6 +81,12 @@ def relatorio():
     return "<script> alert(\"Relatório gerado com sucesso! (arquivo: relatorio.csv)\")</script>" \
            "<script> window.history.back(); </script>"
 
+@app.route('/shutdown', methods=['POST']) # Rota para parar o servidor
+def shutdown():
+    print("Servidor está sendo parado...")
+    return shutdown_server()
+
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, host='0.0.0.0', port=5001)
+    threading.Timer(1.0, abrir_servidor).start()  # Aguarda 1 segundo antes de abrir
+    app.run(debug=False, use_reloader=False, host='0.0.0.0', port=5001)
