@@ -13,7 +13,7 @@
     {% for p in pedidos %}
     <div class="pedido {{ p[4] }}">
         Pedido #{{ p[0] }}<br>
-        Cliente: {{ p[1] }} - {{ p[4] }}
+        Cliente: {{ p[1] }} - {{ p[4].capitalize() }}
     </div>
     {% endfor %}
     <script>

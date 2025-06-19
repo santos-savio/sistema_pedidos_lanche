@@ -17,7 +17,17 @@
     </div>
     <form action="/adicionar" method="post">
         Cliente: <input name="cliente" required>
-        Lanche: <input name="lanche" required>
+        <label for="lanche">Lanche:</label>
+        <select name="lanche" id="lanche" required>
+            <option value="">Selecione um lanche</option>
+            <option value="X-Burguer">X-Burguer</option>
+            <option value="X-Salada">X-Salada</option>
+            <option value="Pizza">Pizza</option>
+            <option value="Cachorro-Quente">Cachorro-Quente</option>
+            <option value="Batata Frita">Batata Frita</option>
+            <option value="Refrigerante">Refrigerante</option>
+            <option value="Suco">Suco</option>
+        </select>
         Observação: <input name="observacao">
         <button type="submit">Adicionar Pedido</button>
     </form>
@@ -37,7 +47,7 @@
             <td>{{ p[1] }}</td>
             <td>{{ p[2] }}</td>
             <td>{{ p[3] }}</td>
-            <td>{{ p[4] }}</td>
+            <td class="{{ p[4] }}">{{ p[4].capitalize() }}</td>
             <td>
                 <a href="/atualizar/{{p[0]}}/aguardando">Aguardando</a> |
                 <a href="/atualizar/{{p[0]}}/preparo">Em preparo</a> |
