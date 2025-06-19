@@ -31,6 +31,9 @@ def shutdown_server():
     func()
     return "Servidor parado."
 
+def mensagem_inicial():
+    print("Sempre mantenha o arquivo vendas.db na mesma pasta do app.py.")
+
 @app.route('/')
 def index():
     with sqlite3.connect("vendas.db") as conn:
