@@ -12,7 +12,7 @@
 
 <body>
     <div class="header">
-        <img src="{{ url_for('static', filename='clube-de-aventureiros-logo.png') }}" alt="Logo" class="logo">
+        <!-- <img src="{{ url_for('static', filename='clube-de-aventureiros-logo.png') }}" alt="Logo" class="logo"> -->
         <h1>Pedidos de Lanches</h1>
     </div>
     <form action="/adicionar" method="post">
@@ -20,11 +20,9 @@
         <label for="lanche">Lanche:</label>
         <select name="lanche" id="lanche" required>
             <option value="">Selecione um sabor</option>
-            <option value="Milho">Milho</option>
-            <option value="Mussarela">Mussarela</option>
-            <option value="Marguerita">Marguerita</option>
-            <option value="Três queijos">Três queijos</option>
-            <option value="Chocolate">Chocolate</option>
+            <option value="Pastel">Pastel</option>
+            <option value="Batata">Batata</option>
+            <option value="Observação">Observação</option>
         </select>
         Observação: <input name="observacao">
         <button type="submit">Adicionar Pedido</button>
