@@ -18,7 +18,7 @@
     <form action="/adicionar" method="post">
         Cliente: <input name="cliente" required>
         <label for="lanche">Lanche:</label>
-        <select name="lanche" id="lanche" required>
+        <select name="lanche" id="lanche" onchange="openTextBox()" required>
             <option value="">Selecione um sabor</option>
             <option value="Milho">Milho</option>
             <option value="Mussarela">Mussarela</option>
@@ -26,6 +26,7 @@
             <option value="Três queijos">Três queijos</option>
             <option value="Chocolate">Chocolate</option>
         </select>
+        <button type="button" id="addLancheButton" onclick="openTextBox()">+</button>
         Observação: <input name="observacao">
         <button type="submit">Adicionar Pedido</button>
     </form>
