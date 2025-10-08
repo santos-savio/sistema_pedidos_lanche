@@ -173,12 +173,12 @@ td.aguardando {
 }
 
 td.preparo {
-  background-color: #f1c40f;
+  background-color: #FFFF00;
   color: black;
 }
 
 td.pronto {
-  background-color: #2ecc71;
+  background-color: #1ddb6c;
   color: white;
 }
 

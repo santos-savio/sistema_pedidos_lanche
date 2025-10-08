@@ -12,7 +12,7 @@
 
 <body>
     <div class="header">
-        <!-- <img src="{{ url_for('static', filename='clube-de-aventureiros-logo.png') }}" alt="Logo" class="logo"> -->
+        <!---<img src="{{ url_for('static', filename='Logo_Fad.png') }}" alt="Logo" class="logo"> --->
         <h1>Pedidos de Lanches</h1>
     </div>
     <form action="/adicionar" method="post">
@@ -27,6 +27,7 @@
             <option value="Chocolate">Chocolate</option>
         </select>
         <button type="button" id="addLancheButton" onclick="openTextBox()">+</button>
+
         Observação: <input name="observacao">
         <button type="submit">Adicionar Pedido</button>
     </form>
@@ -60,5 +61,20 @@
     <br>
     <a href="/display" target="_blank">Abrir Display Externo</a>
 </body>
-
+    <script>
+        function openTextBox() {
+            var select = document.getElementById("lanche");
+            var selectedValue = select.value;
+            if (selectedValue === "") {
+                var newLanche = prompt("Digite o nome do novo lanche:");
+                if (newLanche) {
+                    var option = document.createElement("option");
+                    option.value = newLanche;
+                    option.text = newLanche;
+                    select.add(option);
+                    select.value = newLanche;
+                }
+            }
+        }
+    </script>
 </html>
