@@ -49,7 +49,7 @@ def view():
 @app.route('/adicionar', methods=['POST']) # Adiciona um novo pedido com cliente, lanche e hora atual
 def adicionar():
     cliente = request.form['cliente']
-    lanche = request.form['lanche'] == 'OTH' if request.form['outroLanche'] else request.form['lanche']
+    lanche = request.form['lanche']
     observacao = request.form.get('observacao', '')  # Pega a observação do formulário, se não houver, define como vazio
     # observacao = "observação exemplo"
     hora = datetime.now().strftime("%H:%M:%S")
