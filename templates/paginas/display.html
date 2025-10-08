@@ -8,7 +8,9 @@
 </head>
 
 <body>
-    <img src="{{ url_for('static', filename='Logo_Fad.png') }}" alt="Logo" class="logo">
+    {% if logo %}
+        <img src="{{ logo }}" alt="Logo" style="max-width: 300px; display: block; margin: 0 auto;">
+    {% endif %}
     <h1>Últimos Pedidos</h1>
     {% for p in pedidos %}
     <div class="pedido {{ p[4] }}">

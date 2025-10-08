@@ -13,21 +13,21 @@
 <body>
     <div class="header">
         <!---<img src="{{ url_for('static', filename='Logo_Fad.png') }}" alt="Logo" class="logo"> --->
-        <h1>Pedidos de Lanches</h1>
+        <h1>Pedidos de Lanches
+        <a href="/config" target="_blank" title="Configurações" style="margin-left: 20px;">
+            <img src="{{ url_for('static', filename='gear.svg') }}" alt="Configurações"
+                style="width:32px;height:32px;vertical-align:middle;">
+        </a></h1>
     </div>
     <form action="/adicionar" method="post">
         Cliente: <input name="cliente" required>
         <label for="lanche">Lanche:</label>
-        <select name="lanche" id="lanche" onchange="openTextBox()" required>
+        <select name="lanche" id="lanche" required>
             <option value="">Selecione um sabor</option>
-            <option value="Milho">Milho</option>
-            <option value="Mussarela">Mussarela</option>
-            <option value="Marguerita">Marguerita</option>
-            <option value="Três queijos">Três queijos</option>
-            <option value="Chocolate">Chocolate</option>
+            {% for lanche in lanches %}
+            <option value="{{ lanche[0] }}">{{ lanche[0] }}</option>
+            {% endfor %}
         </select>
-        <button type="button" id="addLancheButton" onclick="openTextBox()">+</button>
-
         Observação: <input name="observacao">
         <button type="submit">Adicionar Pedido</button>
     </form>

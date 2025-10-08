@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Configuração</title>
+</head>
+<body>
+    <h2>Configuração de Lanches</h2>
+    <form action="/config/lanches" method="post">
+        <ul>
+            {% for lanche in lanches %}
+            <li>
+                {{ lanche[1] }}
+                <button type="submit" name="remover" value="{{ lanche[0] }}">Remover</button>
+            </li>
+            {% endfor %}
+        </ul>
+        <input name="novo_lanche" placeholder="Novo lanche">
+        <button type="submit" name="adicionar" value="1">Adicionar</button>
+    </form>
+    <h2>Logo</h2>
+    <form action="/config/logo" method="post" enctype="multipart/form-data">
+        <input type="file" name="logo">
+        <button type="submit">Salvar Logo</button>
+    </form>
+    <a href="/">Voltar</a>
+</body>
+</html>

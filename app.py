@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 from datetime import datetime
 import threading
@@ -7,7 +7,21 @@ import webbrowser
 app = Flask(__name__)
 
 def init_db():
-    with sqlite3.connect("vendas.db") as conn:
+    # Cria tabelas de lanches e configuração no banco.db
+    with sqlite3.connect("banco.db") as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS lanches (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL UNIQUE
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS configuracao (
+                id INTEGER PRIMARY KEY,
+                logo_path TEXT
+            )
+        """)
+            # Cria tabela de pedidos no banco.db
         conn.execute("""
             CREATE TABLE IF NOT EXISTS pedidos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,17 +46,19 @@ def shutdown_server():
     return "Servidor parado."
 
 def mensagem_inicial():
-    print("Sempre mantenha o arquivo vendas.db na mesma pasta do app.py.")
+    print("Sempre mantenha o arquivo banco.db na mesma pasta do app.py.")
 
 @app.route('/')
 def index():
-    with sqlite3.connect("vendas.db") as conn:
-        pedidos = conn.execute("SELECT * FROM pedidos WHERE visivel = 1 ORDER BY id DESC").fetchall()
-    return render_template("paginas/index.html", pedidos=pedidos)
+    with sqlite3.connect('banco.db') as conn:
+        pedidos = conn.execute('SELECT * FROM pedidos').fetchall()
+        lanches = conn.execute('SELECT nome FROM lanches').fetchall()
+        logo = conn.execute('SELECT logo_path FROM configuracao WHERE id=1').fetchone()
+    return render_template('paginas/index.html', pedidos=pedidos, lanches=lanches, logo=logo[0] if logo else None)
 
 @app.route('/view')
 def view():
-    with sqlite3.connect("vendas.db") as conn:
+    with sqlite3.connect("banco.db") as conn:
         pedidos = conn.execute("SELECT * FROM pedidos WHERE visivel = 1 ORDER BY id DESC").fetchall()
     return render_template("paginas/view.html", pedidos=pedidos)
 
@@ -53,33 +69,34 @@ def adicionar():
     observacao = request.form.get('observacao', '')  # Pega a observação do formulário, se não houver, define como vazio
     # observacao = "observação exemplo"
     hora = datetime.now().strftime("%H:%M:%S")
-    with sqlite3.connect("vendas.db") as conn:
+    with sqlite3.connect("banco.db") as conn:
         conn.execute("INSERT INTO pedidos (cliente, lanche, observacao, status, hora) VALUES (?, ?, ?, ?, ?)",
                      (cliente, lanche, observacao, 'aguardando', hora))
     return redirect('/')
 
 @app.route('/atualizar/<int:id>/<status>') # Atualiza o status do pedido conforme o ID e o novo status
 def atualizar(id, status):
-    with sqlite3.connect("vendas.db") as conn:
+    with sqlite3.connect("banco.db") as conn:
         conn.execute("UPDATE pedidos SET status = ? WHERE id = ?", (status, id))
     return redirect('/')
 
 @app.route('/remover/<int:id>') # Remova da exibição definindo visível como 0
 def remover(id):
-    with sqlite3.connect("vendas.db") as conn:
+    with sqlite3.connect("banco.db") as conn:
         conn.execute("UPDATE pedidos SET visivel = 0 WHERE id = ?", (id,))
     return redirect('/')
 
 @app.route('/display')
 def display():
-    with sqlite3.connect("vendas.db") as conn:
+    with sqlite3.connect("banco.db") as conn:
         pedidos = conn.execute("SELECT * FROM pedidos WHERE visivel = 1 ORDER BY id DESC LIMIT 25").fetchall()
-    return render_template("paginas/display.html", pedidos=pedidos)
+        logo = conn.execute("SELECT logo_path FROM configuracao WHERE id=1").fetchone()
+    return render_template("paginas/display.html", pedidos=pedidos, logo=logo[0] if logo else None)
 
 @app.route('/relatorio')
 def relatorio():
     import csv
-    with sqlite3.connect("vendas.db") as conn:
+    with sqlite3.connect("banco.db") as conn:
         pedidos = conn.execute("SELECT * FROM pedidos").fetchall()
     with open("relatorio.csv", "w", newline="") as f:
         writer = csv.writer(f)
@@ -94,6 +111,38 @@ def relatorio():
 def shutdown():
     print("Servidor está sendo parado...")
     return shutdown_server()
+
+def get_lanches():
+    with sqlite3.connect('banco.db') as conn:
+        return conn.execute('SELECT id, nome FROM lanches').fetchall()
+
+@app.route('/config', methods=['GET'])
+def config():
+    lanches = get_lanches()
+    return render_template('paginas/config.html', lanches=lanches)
+
+@app.route('/config/lanches', methods=['POST'])
+def config_lanches():
+    with sqlite3.connect('banco.db') as conn:
+        if 'adicionar' in request.form:
+            novo = request.form['novo_lanche']
+            if novo:
+                conn.execute('INSERT OR IGNORE INTO lanches (nome) VALUES (?)', (novo,))
+        elif 'remover' in request.form:
+            conn.execute('DELETE FROM lanches WHERE id=?', (request.form['remover'],))
+        conn.commit()
+    return redirect(url_for('config'))
+
+@app.route('/config/logo', methods=['POST'])
+def config_logo():
+    file = request.files['logo']
+    if file:
+        path = 'static/' + file.filename
+        file.save(path)
+        with sqlite3.connect('banco.db') as conn:
+            conn.execute('INSERT OR REPLACE INTO configuracao (id, logo_path) VALUES (1, ?)', (path,))
+            conn.commit()
+    return redirect(url_for('config'))
 
 if __name__ == '__main__':
     init_db()
