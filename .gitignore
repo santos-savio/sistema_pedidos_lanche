@@ -18,3 +18,4 @@ db/
 *.pyo
 /dist/
 /build/
+aventulanches.spec
