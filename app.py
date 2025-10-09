@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 import sqlite3
 from datetime import datetime
 import threading
 import webbrowser
+import os
 
 app = Flask(__name__)
 
@@ -51,9 +52,10 @@ def mensagem_inicial():
 @app.route('/')
 def index():
     with sqlite3.connect('banco.db') as conn:
-        pedidos = conn.execute('SELECT * FROM pedidos').fetchall()
+        pedidos = conn.execute('SELECT * FROM pedidos WHERE visivel = 1').fetchall()
         lanches = conn.execute('SELECT nome FROM lanches').fetchall()
         logo = conn.execute('SELECT logo_path FROM configuracao WHERE id=1').fetchone()
+        print("Logo path:", logo)
     return render_template('paginas/index.html', pedidos=pedidos, lanches=lanches, logo=logo[0] if logo else None)
 
 @app.route('/view')
@@ -91,7 +93,8 @@ def display():
     with sqlite3.connect("banco.db") as conn:
         pedidos = conn.execute("SELECT * FROM pedidos WHERE visivel = 1 ORDER BY id DESC LIMIT 25").fetchall()
         logo = conn.execute("SELECT logo_path FROM configuracao WHERE id=1").fetchone()
-    return render_template("paginas/display.html", pedidos=pedidos, logo=logo[0] if logo else None)
+    logo_url = url_for('static', filename=logo[0]) if logo and logo[0] else None
+    return render_template("paginas/display.html", pedidos=pedidos, logo=logo_url)
 
 @app.route('/relatorio')
 def relatorio():
@@ -119,7 +122,10 @@ def get_lanches():
 @app.route('/config', methods=['GET'])
 def config():
     lanches = get_lanches()
-    return render_template('paginas/config.html', lanches=lanches)
+    with sqlite3.connect('banco.db') as conn:
+        logo = conn.execute('SELECT logo_path FROM configuracao WHERE id=1').fetchone()
+    logo_url = url_for('static', filename=logo[0]) if logo and logo[0] else None
+    return render_template('paginas/config.html', lanches=lanches, logo=logo_url)
 
 @app.route('/config/lanches', methods=['POST'])
 def config_lanches():
@@ -136,15 +142,29 @@ def config_lanches():
 @app.route('/config/logo', methods=['POST'])
 def config_logo():
     file = request.files['logo']
+    print("Arquivo recebido:", file.filename)
     if file:
-        path = 'static/' + file.filename
+        static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
+        if not os.path.exists(static_dir):
+            os.makedirs(static_dir)
+        path = os.path.join(static_dir, file.filename)
         file.save(path)
+        # Salva apenas o nome do arquivo no banco
         with sqlite3.connect('banco.db') as conn:
-            conn.execute('INSERT OR REPLACE INTO configuracao (id, logo_path) VALUES (1, ?)', (path,))
+            conn.execute('INSERT OR REPLACE INTO configuracao (id, logo_path) VALUES (1, ?)', (file.filename,))
             conn.commit()
+        return jsonify({'success': True, 'message': 'Logo atualizada com sucesso'})
+    else:
+        return jsonify({'success': False, 'message': 'Nenhum arquivo selecionado'})
+
+@app.route('/config/logo/remover', methods=['POST'])
+def remover_logo():
+    with sqlite3.connect('banco.db') as conn:
+        conn.execute('DELETE FROM configuracao WHERE id=1')
+        conn.commit()
     return redirect(url_for('config'))
 
 if __name__ == '__main__':
     init_db()
-    threading.Timer(1.0, abrir_servidor).start()  # Aguarda 1 segundo antes de abrir
+    threading.Timer(0.5, abrir_servidor).start()  # Aguarda 0.5 segundos antes de abrir
     app.run(debug=False, use_reloader=False, host='0.0.0.0', port=5001)

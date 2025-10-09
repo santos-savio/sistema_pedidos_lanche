@@ -7,7 +7,7 @@
 <body>
     <h2>Configuração de Lanches</h2>
     <form action="/config/lanches" method="post">
-        <ul>
+        <ul>    
             {% for lanche in lanches %}
             <li>
                 {{ lanche[1] }}
@@ -19,10 +19,60 @@
         <button type="submit" name="adicionar" value="1">Adicionar</button>
     </form>
     <h2>Logo</h2>
-    <form action="/config/logo" method="post" enctype="multipart/form-data">
+
+    <!-- <form action="/config/logo" method="post" enctype="multipart/form-data">
         <input type="file" name="logo">
         <button type="submit">Salvar Logo</button>
+    </form> -->
+
+    <form id="logoForm" action="/config/logo" method="post" enctype="multipart/form-data">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="file" name="logo" id="logoInput" accept="image/*">
+            <span id="statusMessage" style="font-size: 14px;"></span>
+        </div>
+    </form>
+
+    <form action="/config/logo/remover" method="post" style="display:inline;">
+        <button type="submit" onclick="return confirm('Remover logo atual?')">Remover Logo</button>
     </form>
     <a href="/">Voltar</a>
 </body>
+
+<script>
+document.getElementById('logoInput').addEventListener('change', function() {
+    if (this.files.length > 0) {
+        const statusMessage = document.getElementById('statusMessage');
+        const fileName = this.files[0].name;
+        const formData = new FormData(document.getElementById('logoForm'));
+        
+        // Feedback de envio
+        statusMessage.textContent = '📤 Enviando ' + fileName + '...';
+        statusMessage.style.color = '#007bff';
+        
+        // Envia via AJAX
+        fetch('/config/logo', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                statusMessage.textContent = '✅ Imagem enviada com sucesso!';
+                statusMessage.style.color = 'green';
+            } else {
+                statusMessage.textContent = '❌ Erro ao enviar imagem';
+                statusMessage.style.color = 'red';
+            }
+        })
+        
+        .finally(() => {
+            // Esconde a mensagem após 3 segundos
+            setTimeout(() => {
+                statusMessage.textContent = '';
+            }, 3000);
+        });
+    }
+});
+</script>
+
 </html>
