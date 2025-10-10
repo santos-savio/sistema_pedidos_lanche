@@ -37,6 +37,7 @@ def init_db():
 
 def abrir_servidor():
     webbrowser.open("http://127.0.0.1:5001/")
+    print("\nSempre mantenha o arquivo banco.db na mesma pasta do app.py.\n")
 
 def shutdown_server():
     """Função para parar o servidor Flask."""
@@ -46,16 +47,16 @@ def shutdown_server():
     func()
     return "Servidor parado."
 
-def mensagem_inicial():
-    print("Sempre mantenha o arquivo banco.db na mesma pasta do app.py.")
-
+def get_lanches():
+    with sqlite3.connect('banco.db') as conn:
+        return conn.execute('SELECT id, nome FROM lanches').fetchall()
+    
 @app.route('/')
 def index():
     with sqlite3.connect('banco.db') as conn:
         pedidos = conn.execute('SELECT * FROM pedidos WHERE visivel = 1').fetchall()
         lanches = conn.execute('SELECT nome FROM lanches').fetchall()
         logo = conn.execute('SELECT logo_path FROM configuracao WHERE id=1').fetchone()
-        print("Logo path:", logo)
     return render_template('paginas/index.html', pedidos=pedidos, lanches=lanches, logo=logo[0] if logo else None)
 
 @app.route('/view')
@@ -115,10 +116,6 @@ def shutdown():
     print("Servidor está sendo parado...")
     return shutdown_server()
 
-def get_lanches():
-    with sqlite3.connect('banco.db') as conn:
-        return conn.execute('SELECT id, nome FROM lanches').fetchall()
-
 @app.route('/config', methods=['GET'])
 def config():
     lanches = get_lanches()
@@ -142,7 +139,6 @@ def config_lanches():
 @app.route('/config/logo', methods=['POST'])
 def config_logo():
     file = request.files['logo']
-    print("Arquivo recebido:", file.filename)
     if file:
         static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
         if not os.path.exists(static_dir):
