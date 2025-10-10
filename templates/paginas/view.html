@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pedidos de Lanches</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Lanche</th>
+            <th>Observação</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+        {% for p in pedidos %}
+        <tr>
+            <td>{{ p[0] }}</td>
+            <td>{{ p[1] }}</td>
+            <td>{{ p[2] }}</td>
+            <td>{{ p[3] }}</td>
+            <td class="{{ p[4] }}">{{ p[4].capitalize() }}</td>
+            <td>
+                <a href="/atualizar/{{p[0]}}/aguardando">Aguardando</a> |
+                <a href="/atualizar/{{p[0]}}/preparo">Em preparo</a> |
+                <a href="/atualizar/{{p[0]}}/pronto">Pronto</a> |
+                <a href="/remover/{{p[0]}}">Remover</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+<script>
+    setInterval(() => location.reload(), 2500);
+</script>
+</html>

@@ -12,12 +12,23 @@
 
 <body>
     <div class="header">
-        <img src="{{ url_for('static', filename='clube-de-aventureiros-logo.png') }}" alt="Logo" class="logo">
-        <h1>Pedidos de Lanches</h1>
+        <!---<img src="{{ url_for('static', filename='Logo_Fad.png') }}" alt="Logo" class="logo"> --->
+        <h1>Pedidos de Lanches
+        <a href="/config" target="_blank" title="Configurações" style="margin-left: 20px;">
+            <img src="{{ url_for('static', filename='gear.svg') }}" alt="Configurações"
+                style="width: 38px;height:38px;vertical-align:middle;">
+        </a></h1>
     </div>
     <form action="/adicionar" method="post">
         Cliente: <input name="cliente" required>
-        Lanche: <input name="lanche" required>
+        <label for="lanche">Lanche:</label>
+        <select name="lanche" id="lanche" required>
+            <option value="">Selecione um sabor</option>
+            {% for lanche in lanches %}
+            <option value="{{ lanche[0] }}">{{ lanche[0] }}</option>
+            {% endfor %}
+        </select>
+        Observação: <input name="observacao">
         <button type="submit">Adicionar Pedido</button>
     </form>
     <hr>
@@ -26,6 +37,7 @@
             <th>ID</th>
             <th>Cliente</th>
             <th>Lanche</th>
+            <th>Observação</th>
             <th>Status</th>
             <th>Ações</th>
         </tr>
@@ -35,6 +47,7 @@
             <td>{{ p[1] }}</td>
             <td>{{ p[2] }}</td>
             <td>{{ p[3] }}</td>
+            <td class="{{ p[4] }}">{{ p[4].capitalize() }}</td>
             <td>
                 <a href="/atualizar/{{p[0]}}/aguardando">Aguardando</a> |
                 <a href="/atualizar/{{p[0]}}/preparo">Em preparo</a> |
@@ -48,5 +61,20 @@
     <br>
     <a href="/display" target="_blank">Abrir Display Externo</a>
 </body>
-
+    <script>
+        function openTextBox() {
+            var select = document.getElementById("lanche");
+            var selectedValue = select.value;
+            if (selectedValue === "") {
+                var newLanche = prompt("Digite o nome do novo lanche:");
+                if (newLanche) {
+                    var option = document.createElement("option");
+                    option.value = newLanche;
+                    option.text = newLanche;
+                    select.add(option);
+                    select.value = newLanche;
+                }
+            }
+        }
+    </script>
 </html>

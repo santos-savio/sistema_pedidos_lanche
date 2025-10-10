@@ -12,3 +12,10 @@ vendas.db
 /database/
 data/
 db/
+
+# Ignora arquivos da compilação
+*.pyc
+*.pyo
+/dist/
+/build/
+aventulanches.spec

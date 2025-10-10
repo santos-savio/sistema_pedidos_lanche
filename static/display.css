@@ -10,18 +10,19 @@ body {
 h1 {
   margin-bottom: 30px;
   color: #f5f5f5;
+  font-size: 48px;
 }
 
 /* Estilo do Pedido */
 .pedido {
   display: block;
   width: 80%;
-  max-width: 600px;
+  max-width: 2000px;
   margin: 20px auto;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-  font-size: 24px;
+  font-size: 56px;
   transition: transform 0.2s;
 }
 
@@ -31,8 +32,8 @@ h1 {
 
 /* Esilo da Logo */
 .logo {
-  width: 150px;
-  margin-bottom: 20px;
+  width: 250px;
+  margin-bottom: 10px;
 }
 
 /* Cor do Status */
@@ -43,11 +44,11 @@ h1 {
 }
 
 .preparo {
-  background: #f1c40f;
+  background: #FFFF00;
   color: #111;
 }
 
 .pronto {
-  background: #2ecc71;
+  background: #1ddb6c;
   color: white;
 }

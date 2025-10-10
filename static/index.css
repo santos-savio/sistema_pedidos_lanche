@@ -82,11 +82,27 @@ form button:active {
   transform: scale(0.98);
 }
 
+form select {
+  padding: 10px 14px;
+  margin: 8px 6px;
+  border: 1px solid #ccddee;
+  border-radius: 10px;
+  outline: none;
+  width: 200px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+form select:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 6px rgba(52, 152, 219, 0.4);
+}
+
 /* Estilo do Table */
 table {
   width: 95%;
   margin: 0 auto;
   border-collapse: collapse;
+  border-spacing: 0;
   background-color: white;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   border-radius: 16px;
@@ -103,11 +119,11 @@ th {
 
 td {
   padding: 14px 10px;
-  border-bottom: 1px solid #eee;
   font-size: 0.95em;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-tr:hover td {
+tr:hover td:not(.aguardando):not(.preparo):not(.pronto) {
   background-color: #f9f9f9;
 }
 
@@ -148,6 +164,22 @@ a[href="/display"]:hover {
 a[href="/relatorio"]:active,
 a[href="/display"]:active {
   transform: scale(0.98);
+}
+
+/* Cores do Status no Index */
+td.aguardando {
+  background-color: #222;
+  color: white;
+}
+
+td.preparo {
+  background-color: #FFFF00;
+  color: black;
+}
+
+td.pronto {
+  background-color: #1ddb6c;
+  color: white;
 }
 
 /* Responsivo */
