@@ -36,3 +36,5 @@ sistema_pedidos_lanche/
 
 ## 🖥️ Acesse em qualquer dispositivo da rede: <br>
 http://IP-do-computador:5001
+
+[📦 Acesse as releases](https://github.com/santos-savio/sistema_pedidos_lanche/releases)
