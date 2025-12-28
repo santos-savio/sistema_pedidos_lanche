@@ -36,8 +36,8 @@ def init_db():
         """)
 
 def abrir_servidor():
-    webbrowser.open("http://127.0.0.1:5001/")
-    print("\nSempre mantenha o arquivo banco.db na mesma pasta do app.py.\n")
+    webbrowser.open("http://127.0.0.1:5004/")
+    print("\nSempre mantenha o arquivo banco.db na mesma pasta do arquivo GestaoPedidos.exe.\n")
 
 def shutdown_server():
     """Função para parar o servidor Flask."""
@@ -163,4 +163,4 @@ def remover_logo():
 if __name__ == '__main__':
     init_db()
     threading.Timer(0.5, abrir_servidor).start()  # Aguarda 0.5 segundos antes de abrir
-    app.run(debug=False, use_reloader=False, host='0.0.0.0', port=5001)
+    app.run(debug=False, use_reloader=False, host='0.0.0.0', port=50004)
